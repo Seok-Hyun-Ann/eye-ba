@@ -1,0 +1,4 @@
+# 줄 끝을 LF로 맞춘다. Windows의 git 설정(core.autocrlf)이 꺼낼 때 CRLF로 바꾸지 않게 한다.
+# 배치 파일만 CRLF로 둔다.
+* text=auto eol=lf
+*.bat text eol=crlf

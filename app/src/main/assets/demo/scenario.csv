@@ -1,0 +1,13 @@
+# 초,사진,소리  (DemoFeedSource가 1초마다 사진 한 장과 소리 1초를 보낸다.)
+# 1. 깨어 있음
+15,c0362.jpg,demo/carnoise.wav
+# 2. 고개만 돌리고 눈은 이쪽을 봄(시선 약 2도) → 그대로 "깨어 있어요". 창문 쪽을 본다고 말하지 않아야 한다
+12,c0329.jpg,demo/carnoise.wav
+# 3. 눈을 감음 → 10초 뒤 "자는 것 같아요"(시연용 문턱, 실제는 1분)
+35,c0401.jpg,demo/carnoise.wav
+# 4. 우는 얼굴과 울음소리 → "아이가 울고 있어요"
+25,k0024.jpg,demo/cry_1.wav|demo/cry_2.wav|demo/cry_3.wav|demo/cry_4.wav|demo/cry_5.wav|demo/cry_6.wav
+# 5. 울음 그침(소리가 3초 없고 얼굴이 차분하면) → 깨어 있음
+25,c0362.jpg,demo/carnoise.wav
+# 6. 얼굴이 안 보임 → 10초 뒤 "얼굴이 잘 안 보여요" (마지막 장면은 멈출 때까지 이어진다)
+20,hidden.png,demo/carnoise.wav

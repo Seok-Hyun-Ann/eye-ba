@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 화면이 뜰 때 깔리는 베이지 색(테마의 windowBackground). Ui.CREAM과 같은 값이다. 나머지 색은 모두 Ui.kt에 있다 -->
+    <color name="window">#FFF6F1E8</color>
+</resources>

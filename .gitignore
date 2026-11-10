@@ -1,0 +1,12 @@
+*.iml
+.gradle
+/local.properties
+# Android Studio 설정과 Kotlin 컴파일 캐시는 PC마다 달라 올리지 않는다
+/.idea/
+.kotlin/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties

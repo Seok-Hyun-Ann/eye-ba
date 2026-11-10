@@ -1,0 +1,25 @@
+[versions]
+agp = "9.5.0"
+coreKtx = "1.10.1"
+junit = "4.13.2"
+appcompat = "1.6.1"
+material = "1.10.0"
+pleosVehicle = "2.3.2"
+pleosSpeech = "3.3.1"
+pleosNavi = "3.0.5"
+mediapipe = "1.1.1"
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+pleos-vehicle = { group = "ai.pleos.playground", name = "Vehicle", version.ref = "pleosVehicle" }
+pleos-tts = { group = "ai.pleos.playground", name = "TextToSpeech", version.ref = "pleosSpeech" }
+pleos-navi = { group = "ai.pleos.playground", name = "NaviHelper", version.ref = "pleosNavi" }
+mediapipe-tasks-audio = { group = "com.google.mediapipe", name = "tasks-audio", version.ref = "mediapipe" }
+mediapipe-tasks-vision = { group = "com.google.mediapipe", name = "tasks-vision", version.ref = "mediapipe" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+

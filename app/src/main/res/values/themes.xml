@@ -1,0 +1,10 @@
+<resources>
+    <!--
+        앱의 색은 Ui.kt 한곳에서 정한다. 테마는 두 가지만 맡는다.
+        - 위 막대(액션바)를 쓰지 않는다. 그래서 화면마다 막대를 숨기던 코드가 없다.
+        - 화면이 뜰 때 흰 바탕이 번쩍이지 않게 앱의 바탕색을 깐다.
+    -->
+    <style name="Theme.RearCare" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/window</item>
+    </style>
+</resources>

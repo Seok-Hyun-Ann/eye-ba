@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+   Android 11 이하에서 쓰는 백업 규칙. Android 12 이상은 data_extraction_rules.xml을 쓴다.
+   See https://developer.android.com/guide/topics/data/autobackup
+-->
+<full-backup-content>
+    <!-- 아이가 다닌 곳과 생일은 차 안에만 둔다 -->
+    <exclude domain="file" path="diary/"/>
+    <exclude domain="sharedpref" path="trip_diary.xml"/>
+</full-backup-content>

@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 설정과 주행 중 수면 화면의 그림 아이콘. 이 앱을 위해 직접 그렸다. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="96dp" android:height="96dp" android:viewportWidth="96" android:viewportHeight="96"><path android:fillColor="#FFE6CF" android:pathData="M26,0H70A26,26 0 0 1 96,26V70A26,26 0 0 1 70,96H26A26,26 0 0 1 0,70V26A26,26 0 0 1 26,0Z"/><path android:fillColor="#E8825A" android:pathData="M48 14c-14 0 -25 11 -25 25c0 18 25 43 25 43s25 -25 25 -43c0 -14 -11 -25 -25 -25z"/><path android:fillColor="#FFFFFF" android:pathData="M38,39A10,10 0 1 1 58,39A10,10 0 1 1 38,39Z"/></vector>

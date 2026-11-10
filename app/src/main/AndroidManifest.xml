@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 차량(Android Automotive)에서만 동작하는 앱이라는 표시 -->
+    <uses-feature
+        android:name="android.hardware.type.automotive"
+        android:required="true" />
+
+    <!-- 음성 출력(TTS)을 차량 음성 서비스에 요청하기 위한 Pleos 권한 -->
+    <uses-permission android:name="pleos.car.permission.TTS_SERVICE" />
+
+    <!-- 기어(P/R/N/D)를 읽기 위한 Pleos 권한 -->
+    <uses-permission android:name="pleos.car.permission.CAR_DRIVE" />
+
+    <!-- 공조·조명: 읽기(CAR_*)와 바꾸기(CONTROL_CAR_*) 권한이 따로 있다.
+         바꾸기 권한은 마켓 배포 때 승인이 필요하다. 공모전 개발에서는 선언만 하면 된다 -->
+    <uses-permission android:name="pleos.car.permission.CAR_CLIMATE" />
+    <uses-permission android:name="pleos.car.permission.CONTROL_CAR_CLIMATE" />
+    <uses-permission android:name="pleos.car.permission.CAR_LIGHTS" />
+    <uses-permission android:name="pleos.car.permission.CONTROL_CAR_LIGHTS" />
+    <!-- 주행 중 뒷창문이 열리면 알리고 잠글지 묻는다. 위와 같이 공모전에서는 선언만 하면 된다 -->
+    <uses-permission android:name="pleos.car.permission.CAR_WINDOWS" />
+    <uses-permission android:name="pleos.car.permission.CONTROL_CAR_WINDOWS" />
+    <!-- 내비를 전체 화면으로 두고 아이 화면을 작게 겹쳐 띄울 때 쓴다. 새로 설치하면 허용되어 있지 않아 README에 adb 명령을 적어 두었다 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!-- 아이와 다닌 곳: 내비의 목적지와 지금 위치를 읽는다. 경로나 경유지는 바꾸지 않는다 -->
+    <uses-permission android:name="pleos.car.permission.NAVI_ROUTE" />
+    <!-- 아이와 다닌 곳: 기록을 누르면 그 장소를 내비 화면에 연다 -->
+    <uses-permission android:name="pleos.car.permission.NAVI_CUSTOM_MAP" />
+    <!-- 주행 중 수면: 자는 동안과 깨어 있는 동안의 속도를 비교한다. Pleos SDK에 지금 속도가 없어 Android 차 서비스의 표준 속도를 읽는다.
+         사용자가 허락하는 권한이라 "오늘 아이와의 운행을 기록할까요?"에 "네"라고 할 때 묻는다 -->
+    <uses-permission android:name="android.car.permission.CAR_SPEED" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.RearCare">
+
+        <!-- 차의 음성 비서(Gleo)가 앱을 부르는 입구. 문서 예시는 function 이름 그대로지만, 내비 앱은 "패키지명.이름"으로 받아 둘 다 등록한다 -->
+        <receiver
+            android:name=".GleoReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="CHECK_CHILD_STATUS" />
+                <action android:name="com.rearcare.car.CHECK_CHILD_STATUS" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 아이 상태 화면. 주행 중에도 보는 화면이라 DO 선언을 한다.
+             움직이는 영상은 보여 주지 않는다. 주행 중에는 앱이 스스로 설정 줄을 숨긴다(플랫폼이 대신 막아 주지 않음).
+             configChanges: 내비 옆으로 분할해 창 크기가 바뀌어도 화면을 다시 만들지 않는다(분석과 듣기가 끊기지 않게)
+             singleTask: 차 화면의 아이콘을 누를 때마다 화면이 새로 쌓여 분석과 음성이 겹쳐 돌던 것을 막는다 -->
+        <activity
+            android:name=".RearStatusActivity"
+            android:launchMode="singleTask"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|uiMode"
+            android:exported="true">
+            <!-- 앱 목록에서 아이콘을 누르면 바로 이 화면이 열린다 -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <meta-data
+                android:name="distractionOptimized"
+                android:value="true" />
+        </activity>
+
+        <!-- 설정 화면(잠잘 때 온도·조명, 주행 중 사진 간격). 설정 화면이라 DO 선언을 하지 않는다(주행 중 설정 금지).
+             앱도 주행으로 바뀌면 스스로 닫는다 -->
+        <activity
+            android:name=".SleepSettingsActivity"
+            android:taskAffinity="com.rearcare.car.screens"
+            android:exported="false" />
+
+        <!-- 아이와 다닌 곳. 설정 화면처럼 DO 선언을 하지 않는다. 앱도 주행으로 바뀌면 스스로 닫는다 -->
+        <activity
+            android:name=".TripDiaryActivity"
+            android:taskAffinity="com.rearcare.car.screens"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:exported="false" />
+
+        <!-- 주행 중 수면. 설정과 다닌 곳 화면에서 연다. 같은 까닭으로 DO 선언을 하지 않고, 주행으로 바뀌면 닫는다 -->
+        <activity
+            android:name=".SleepReportActivity"
+            android:taskAffinity="com.rearcare.car.screens"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:exported="false" />
+
+        <!-- 작은 창에서 "네"라고 답한 뒤 속도 권한만 묻고 닫히는 투명한 화면 -->
+        <activity
+            android:name=".SpeedPermissionActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"
+            android:exported="false" />
+    </application>
+
+</manifest>

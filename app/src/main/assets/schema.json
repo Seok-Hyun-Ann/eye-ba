@@ -1,0 +1,20 @@
+{
+  "packageName": "com.rearcare.car",
+  "appDescription": "A rear seat care app that tells the driver the current state of the child in the back seat.",
+  "version": "1.0",
+  "actionCalls": [
+    {
+      "type": "function",
+      "function": {
+        "name": "CHECK_CHILD_STATUS",
+        "description": "Tell the driver the current state of the child in the rear seat of the car.",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "required": []
+        },
+        "component": "service"
+      }
+    }
+  ]
+}

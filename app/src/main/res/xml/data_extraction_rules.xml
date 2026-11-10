@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+   Android 12 이상에서 쓰는 백업 규칙.
+   See https://developer.android.com/about/versions/12/backup-restore#xml-changes
+-->
+<data-extraction-rules>
+    <!-- 아이가 다닌 곳과 생일은 차 안에만 둔다 -->
+    <cloud-backup>
+        <exclude domain="file" path="diary/"/>
+        <exclude domain="sharedpref" path="trip_diary.xml"/>
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="file" path="diary/"/>
+        <exclude domain="sharedpref" path="trip_diary.xml"/>
+    </device-transfer>
+</data-extraction-rules>
