@@ -9,7 +9,7 @@
 Pleos Connect 에뮬레이터를 켠 뒤 아래 두 줄을 실행하고, 앱 목록에서 **eye-ba**를 엽니다.
 
 ```
-adb install -r apk/<팀명>_eye-ba_release.apk
+adb install -r apk/안석현_eye-ba_release.apk
 adb shell appops set --user 10 com.rearcare.car SYSTEM_ALERT_WINDOW allow
 ```
 
@@ -24,7 +24,7 @@ adb shell appops set --user 10 com.rearcare.car SYSTEM_ALERT_WINDOW allow
 
 ## APK 파일 위치
 
-`apk/<팀명>_eye-ba_release.apk`
+`apk/안석현_eye-ba_release.apk`
 
 ## 테스트 환경
 
