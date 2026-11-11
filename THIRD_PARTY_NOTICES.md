@@ -72,6 +72,7 @@
 - ESC-50: K. J. Piczak, "ESC: Dataset for Environmental Sound Classification", 2015.
 - `hidden.png`, `scenario.csv`, `sample_trips.tsv`는 이 앱을 위해 만든 파일이다. `sample_trips.tsv`의 기록은 실제로 다녀온 기록이 아니다.
 - `readme/float_on_navi.png`(README의 그림): Pleos Connect 에뮬레이터 v2.1.0에서 이 앱을 실행한 화면을 2026-11-10에 찍은 것이다. 내비, 왼쪽 차 상태 칸, 아래 막대는 에뮬레이터에 들어 있는 화면이고, 오른쪽 위 작은 창의 아이 사진은 위 표의 `c0362.jpg`(퍼블릭 도메인)다.
+- `readme/`의 나머지 그림(`ask_trip.png`, `sleep_offer.png`, `settings.png`, `trips.png`, `trip_card.png`, `sleep_report.png`, `sleep_day.png`): 같은 에뮬레이터에서 release 빌드를 실행한 화면을 2026-11-11에 찍어 앱 부분만 잘라 낸 것이다. 아이 사진은 위 표의 `c0362.jpg`(퍼블릭 도메인)와 `c0401.jpg`(MIKI Yoshihito, CC BY 2.0)다. `trips.png`와 `trip_card.png`의 서울대공원 카드 사진은 사진 넣기를 시험하려고 에뮬레이터 갤러리에 넣은 사진으로, APK와 시연 자료에는 들어 있지 않다. 모두 Wikimedia Commons에 Drcbrothephotographer가 올린 CC0 사진이다: [Common peafowl cock with stretching wings](https://commons.wikimedia.org/wiki/File:Common_peafowl_cock_with_stretching_wings.jpg)(그림에 보이는 사진), `Ankole-Watusi Cows in Seoul Zoo.jpg`, `TapirKorea.jpg`, `Western white stork in Seoul Zoo, 2022 (1).jpg`.
 
 ## 4. 넣지 않은 것
 - **글꼴 Asta Sans:** 차에 깔린 글꼴을 이름으로 불러 쓴다. 글꼴 파일은 이 저장소와 앱에 없다. 글꼴의 조건은 SIL Open Font License 1.1이다.
