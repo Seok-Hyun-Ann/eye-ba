@@ -406,8 +406,14 @@ class CabinController(context: Context) {
         }
     }
 
+    /**
+     * 온도와 바람은 한 값씩 차례로 바꾼다. 한 값을 바꾸고 다시 읽어 확인한 뒤에 다음 값을 보낸다.
+     * 2026-11-11 에뮬레이터에서 운전석·조수석 온도와 바람을 한꺼번에 보냈을 때 한 구역의 온도가 바뀌지 않는 일이
+     * 두 번 있었다(docs/22). 그래서 공조 값끼리는 겹쳐 보내지 않는다.
+     */
     private fun applyClimate(p: ComfortAdvisor.Proposal, tally: Tally, onLog: (String) -> Unit) {
         val hvac = vehicle.getHVAC()
+        val steps = mutableListOf<(done: () -> Unit) -> Unit>()
         p.setTempC?.let { target ->
             val areas = targetAreas(tempBounds)
             if (areas.isEmpty()) { tally.begin(); tally.fail() }
@@ -415,21 +421,24 @@ class CabinController(context: Context) {
                 val b = tempBounds.getValue(area)
                 val t = target.coerceIn(b.minValue, b.maxValue)
                 tally.begin()
-                hvac.getHvacTemperature(area, TemperatureUnit.CELSIUS, { before ->
-                    handler.post {
-                        hvac.setHvacTemperature(area, t, TemperatureUnit.CELSIUS, { a, _ ->
-                            confirmTemp(area, t) { same ->
-                                if (same) {
-                                    report(onLog, "설정 온도: $before → $t℃", a.label())
-                                    tally.ok()
-                                } else {
-                                    report(onLog, "설정 온도: 바뀌지 않음", a.label())
-                                    tally.fail()
+                steps += { done ->
+                    hvac.getHvacTemperature(area, TemperatureUnit.CELSIUS, { before ->
+                        handler.post {
+                            hvac.setHvacTemperature(area, t, TemperatureUnit.CELSIUS, { a, _ ->
+                                confirmTemp(area, t) { same ->
+                                    if (same) {
+                                        report(onLog, "설정 온도: $before → $t℃", a.label())
+                                        tally.ok()
+                                    } else {
+                                        report(onLog, "설정 온도: 바뀌지 않음", a.label())
+                                        tally.fail()
+                                    }
+                                    done()
                                 }
-                            }
-                        }, { e -> Log.e(TAG, "온도 바꾸기 실패", e); handler.post { tally.fail() } })
-                    }
-                }, { e -> Log.e(TAG, "온도 읽기 실패", e); handler.post { tally.fail() } })
+                            }, { e -> Log.e(TAG, "온도 바꾸기 실패", e); handler.post { tally.fail(); done() } })
+                        }
+                    }, { e -> Log.e(TAG, "온도 읽기 실패", e); handler.post { tally.fail(); done() } })
+                }
             }
         }
         p.setFanSpeed?.let { level ->
@@ -438,23 +447,27 @@ class CabinController(context: Context) {
             areas.forEach { area ->
                 val v = level.coerceIn(fanBounds.getValue(area).minValue, fanBounds.getValue(area).maxValue)
                 tally.begin()
-                hvac.getHvacFanSpeed(area, { before ->
-                    handler.post {
-                        hvac.setHvacFanSpeed(area, v, { a, _ ->
-                            confirmFan(area, v) { same ->
-                                if (same) {
-                                    report(onLog, "바람: $before → $v", a.label())
-                                    tally.ok()
-                                } else {
-                                    report(onLog, "바람: 바뀌지 않음", a.label())
-                                    tally.fail()
+                steps += { done ->
+                    hvac.getHvacFanSpeed(area, { before ->
+                        handler.post {
+                            hvac.setHvacFanSpeed(area, v, { a, _ ->
+                                confirmFan(area, v) { same ->
+                                    if (same) {
+                                        report(onLog, "바람: $before → $v", a.label())
+                                        tally.ok()
+                                    } else {
+                                        report(onLog, "바람: 바뀌지 않음", a.label())
+                                        tally.fail()
+                                    }
+                                    done()
                                 }
-                            }
-                        }, { e -> Log.e(TAG, "바람 바꾸기 실패", e); handler.post { tally.fail() } })
-                    }
-                }, { e -> Log.e(TAG, "바람 읽기 실패", e); handler.post { tally.fail() } })
+                            }, { e -> Log.e(TAG, "바람 바꾸기 실패", e); handler.post { tally.fail(); done() } })
+                        }
+                    }, { e -> Log.e(TAG, "바람 읽기 실패", e); handler.post { tally.fail(); done() } })
+                }
             }
         }
+        runInOrder(steps)
     }
 
     private fun applyLights(tally: Tally, onLog: (String) -> Unit) {
@@ -610,5 +623,20 @@ class CabinController(context: Context) {
          */
         private const val AMBIENT_FADE_STEPS = 10
         private const val AMBIENT_FADE_STEP_MS = 1_000L
+
+        /** 일을 하나씩 차례로 한다. 앞의 일이 done을 불러야 다음 일을 시작한다. done을 여러 번 불러도 다음 일은 한 번만 한다 */
+        internal fun runInOrder(steps: List<(done: () -> Unit) -> Unit>) {
+            fun run(i: Int) {
+                if (i >= steps.size) return
+                var finished = false
+                steps[i] {
+                    if (!finished) {
+                        finished = true
+                        run(i + 1)
+                    }
+                }
+            }
+            run(0)
+        }
     }
 }
